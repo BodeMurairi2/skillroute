@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Everything about cars</title>
+</head>
+<body>
+    <div>
+        <h1>Welcome to Everything About Cars Website</h1>
+        <p> Your AI assistant for Cars</p>
+    </div>
+    <div>
+        <h2>Find all info about any cars you want</h2>
+        <p> Upload Your photo to our AI </p>
+    </div>
+    <div>
+        <h2>Upload your car photo</h2>
+        <div class="upload-image">
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <input type="file" name="car_photo" accept="image/*" required> <br><br>
+                <div>
+                    <button type="submit">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
