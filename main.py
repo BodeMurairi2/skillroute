@@ -1,29 +1,47 @@
 #!/usr/bin/env python3
 
-"""This script handles operation for a Car website"""
+"""Main logic"""
 
 import os
-from dotenv import load_dotenv
-from google import genai
+import shutil
+from flask import Flask, request, redirect, render_template, url_for
+from store_userphoto import upload_user_image
+from get_car_info import get_request
+from werkzeug.utils import secure_filename
 
+UPLOAD_DIR = "temp_uploads"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-# load env variable
-load_dotenv()
+app = Flask(__name__)
 
-# take an image path
-image_path="/home/bode-murairi/Desktop/LEAD.jpg"
+@app.route("/", methods=["GET", "POST"])
+def home():
+    """Home page"""
+    if request.method == "POST":
+        file = request.files["car_photo"]
+        question_message = request.form.get("message")
+        if file:
+            # Save uploaded file temporarily
+            filename = secure_filename(file.filename)
+            temp_path = os.path.join(UPLOAD_DIR, filename)
+            file.save(temp_path)
 
+            # upload to R2 Cloudflare
+            upload_user_image(image_path=temp_path, file_name=filename)
 
-# setup gemini
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+            # upload to gemini
+            get_request(image_path=temp_path, userMessage=question_message)
 
-my_file = client.files.upload(file=image_path)
+            # remove temp folder
+            shutil.rmtree(UPLOAD_DIR)
 
-message = "Can you describe this car on the image?"
+        return redirect(url_for('get_infos'))
+    return render_template("index.html")
 
-response = client.models.generate_content(
-    model="gemini-2.5-flash",
-    contents=[my_file, message]
-)
+@app.route("/get-car-info/get-infos", methods=["GET"])
+def get_infos():
+    """get infos"""
+    return render_template("carInfo.html")
 
-print(response.text)
+if __name__ == "__main__":
+    app.run(debug=True, port=8000)
