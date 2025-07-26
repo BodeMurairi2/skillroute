@@ -7,3 +7,9 @@ config.env
 
 # ignore __pycache__
 __pycache__/
+
+# remove temp_Session/
+temp_Session/
+
+# remove temp_uploads/
+temp_uploads/
