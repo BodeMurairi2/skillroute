@@ -1,4 +1,5 @@
 flask
+flask_session
 google-genai
 python-dotenv
 boto3
