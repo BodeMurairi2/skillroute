@@ -23,6 +23,7 @@ s3 = boto3.client(
 )
 
 def upload_user_image(image_path, file_name):
+    """Function to upload user image to cloudflare"""
     path_to_upload = f"user_data/uploads/{file_name}"
     
     with open(image_path, "rb") as f:
@@ -32,5 +33,9 @@ def upload_user_image(image_path, file_name):
             Body=f.read()
         )
 
+    base_url = os.getenv("R2_PUBLIC_URL_BASE").rstrip("/")
+    public_url = f"{base_url}/{path_to_upload}"
+    return public_url
+
 if __name__ == "__main__":
-    upload_user_image(image_path, file_name)
+    upload_user_image(image_path,filename)

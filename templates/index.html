@@ -14,20 +14,14 @@
         <h2>Find all info about any cars you want</h2>
         <p> Upload Your photo to our AI </p>
     </div>
-    <div>
-        <h2>Upload your car photo</h2>
-        <div class="upload-image">
-            <form action="/" method="post" enctype="multipart/form-data">
-                <label for="message"> Enter your question </label>
-                <div>
-                    <textarea id="message" name="message" rows="4" cols="50" placeholder="Type your question here..." required></textarea><br><br>
-                </div>
-                <input type="file" name="car_photo" accept="image/*" required> <br><br>
-                <div>
-                    <button type="submit">Upload</button>
-                </div>
-            </form>
-        </div>
+    <div class="upload-section">
+        <h2>Upload Your Car Photo</h2>
+        <form action="/" method="post" enctype="multipart/form-data" class="upload-form">
+            <label for="car_photo">Choose a car image:</label><br>
+            <input type="file" id="car_photo" name="car_photo" accept=".jpg,.jpeg,.png,.webp" required><br><br>
+            <button type="submit">Upload</button>
+        </form>
     </div>
-</body>
+
+    </body>
 </html>
