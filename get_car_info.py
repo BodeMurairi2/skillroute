@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from google import genai
 
 # load env variable
-load_dotenv()
+load_dotenv('auth.env')
 
 def get_request(image_path):
     """Get request to Gemini AI"""

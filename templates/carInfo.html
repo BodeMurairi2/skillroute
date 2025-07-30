@@ -34,11 +34,17 @@
       <div class="spec-group">
         <h3>Buy Now</h3>
         {% for url in car_primary_info['where_to_buy'] %}
-          <p><a href='{{ url }}' target="_blank">{{ car_primary_info['car_name'] }} Official Site</a></p>
+          <a href="{{ url }}" target="_blank" class="btn btn-outline-primary btn-sm me-2 mb-2">
+            Visit {{ car_primary_info['car_name'] }} Official Site
+          </a><br><br>
         {% endfor %}
-        <a href="{{ url_for('download_report') }}" class="btn btn-primary mt-3" download>
-            Download Report as PDF
+
+        <a href="{{ url_for('download_report') }}" class="btn btn-primary btn-sm mt-3" download>
+          Download
         </a>
+        <a href="/send" class="btn btn-success btn-sm mt-3">Send report</a>
+        <a href="/" class="btn btn-secondary btn-sm mt-3">Back to Main</a>
+
       </div>
     </div>
 

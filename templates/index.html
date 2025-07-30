@@ -9,6 +9,30 @@
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
   <div class="w-full max-w-2xl space-y-8">
 
+    <!-- FLASH MESSAGES -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="space-y-4">
+          {% for category, message in messages %}
+            <div 
+              class="px-4 py-3 rounded-md text-white
+              {% if category == 'success' %}
+                bg-green-500
+              {% elif category == 'error' %}
+                bg-red-500
+              {% else %}
+                bg-blue-500
+              {% endif %}
+              "
+              role="alert"
+            >
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    
     <div class="text-center">
       <h1 class="text-3xl font-bold text-gray-800">Welcome to Car Finder</h1>
       <p class="text-lg text-gray-600 mt-2">Your AI assistant for Cars</p>
@@ -35,15 +59,16 @@
         </div>
       </form>
     </div>
+    
     <footer>
-        <div class="text-center text-gray-500 mt-8">
-            <p>&copy; 2023 Car Finder. All rights reserved.</p>
-            <p> Made by Bode Murairi <a href="mailto:bodemurairi2@gmail.com" class="text-blue-600 underline">Contact Me!</a></p>
-            <p><a href="https://www.linkedin.com/in/bode-murairi-2490501aa/" target="_blank" class="text-blue-600 underline">LinkedIn</a></p>
-            <p><a href="https://github.com/BodeMurairi?tab=repositories" target="_blank" class="text-blue-600 underline"> Github page</a></p>
-            <p> Special Thanks to Google</p>
-            <p>Powered by Gemini AI</p>
-        </div>
+      <div class="text-center text-gray-500 mt-8 space-y-1">
+        <p>&copy; 2023 Car Finder. All rights reserved.</p>
+        <p>Made by Bode Murairi <a href="mailto:bodemurairi2@gmail.com" class="text-blue-600 underline">Contact Me!</a></p>
+        <p><a href="https://www.linkedin.com/in/bode-murairi-2490501aa/" target="_blank" class="text-blue-600 underline">LinkedIn</a></p>
+        <p><a href="https://github.com/BodeMurairi?tab=repositories" target="_blank" class="text-blue-600 underline">Github page</a></p>
+        <p>Special Thanks to Google</p>
+        <p>Powered by Gemini AI</p>
+      </div>
     </footer>
 
   </div>

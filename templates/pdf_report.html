@@ -1,79 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Car Report</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <title>{{ car_primary_info['car_name'] }} - PDF Report</title>
   <style>
-    body {
-      padding: 2rem;
-      font-size: 0.9rem;
-    }
-    h1, h2, h3 {
-      color: #333;
-    }
-    img {
-      max-width: 100%;
-      height: auto;
-    }
-    ul {
-      padding-left: 1.2rem;
-    }
+    body { font-family: Arial, sans-serif; padding: 40px; }
+    h1 { color: #222; }
+    ul { padding-left: 20px; }
+    p, li { font-size: 14px; line-height: 1.6; }
+    .section { margin-top: 20px; }
   </style>
 </head>
 <body>
-
-  {% if is_car %}
-  <h1 class="mb-3">{{ car_primary_info.car_name }}</h1>
-  <p><strong>Model:</strong> {{ car_primary_info.car_model }}</p>
-  <p><strong>Year:</strong> {{ car_primary_info.car_year }}</p>
-  <p><strong>Color:</strong> {{ car_primary_info.color }}</p>
-  <p><strong>Engine:</strong> {{ car_primary_info.engine_type }}</p>
-  <p><strong>Price:</strong> {{ car_primary_info.price }}</p>
-
-  <h3 class="mt-4">Performance</h3>
-  <ul>
-    <li>Horsepower: {{ car_performance_specs.horsepower }}</li>
-    <li>Torque: {{ car_performance_specs.torque }}</li>
-    <li>0–60 mph: {{ car_performance_specs['0_60_mph'] }}</li>
-    <li>Top Speed: {{ car_performance_specs.top_speed }}</li>
-  </ul>
-
-  <h3 class="mt-4">Design</h3>
-  <p><strong>Exterior:</strong> {{ car_primary_info.exterior_design }}</p>
-  <p><strong>Interior:</strong> {{ car_primary_info.interior_design }}</p>
-
-  <h3 class="mt-4">Features</h3>
-  <ul>
-    {% for feature in car_features %}
-      <li>{{ feature }}</li>
-    {% endfor %}
-  </ul>
-
-  <h3 class="mt-4">Safety</h3>
-  <ul>
-    {% for safety in car_safety_features %}
-      <li>{{ safety }}</li>
-    {% endfor %}
-  </ul>
-
-  <h3 class="mt-4">Image</h3>
-  {% if car_primary_info.user_uploaded_image_url %}
-    <img src="{{ car_primary_info.user_uploaded_image_url }}" alt="Car Image">
+  {% if car_primary_info['user_uploaded_image_url'] %}
+    <div style="text-align: center; margin-bottom: 20px;">
+      <img src="{{ car_primary_info['user_uploaded_image_url'] }}" alt="Uploaded Car Image" style="max-width: 400px; height: auto; border-radius: 8px;">
+    </div>
   {% endif %}
 
-  <h3 class="mt-4">Other Info</h3>
-  <p><strong>Special Features:</strong> {{ car_primary_info.special_features_modifications }}</p>
-  <p><strong>Description:</strong> {{ car_primary_info.image_url }}</p>
+  <h1>{{ car_primary_info['car_name'] }} - {{ car_primary_info['car_model'] }}</h1>
+  <p><strong>Year:</strong> {{ car_primary_info['car_year'] }}</p>
+  <p><strong>Body Style:</strong> {{ car_primary_info['body_style'] }}</p>
+  <p><strong>Color:</strong> {{ car_primary_info['color'] }}</p>
+  <p><strong>Engine Type:</strong> {{ car_primary_info['engine_type'] }}</p>
+  <p><strong>Price Range:</strong> {{ car_primary_info['price'] }}</p>
 
-  {% else %}
-  <h1 class="text-danger">Not a Car</h1>
-  <p>{{ car_primary_info.message }}</p>
-  <p>{{ car_primary_info.image_url }}</p>
-  {% if car_primary_info.user_uploaded_image_url %}
-    <img src="{{ car_primary_info.user_uploaded_image_url }}" alt="Uploaded Image">
-  {% endif %}
-  {% endif %}
+  <div class="section">
+    <h2>Performance</h2>
+    <ul>
+      <li>Horsepower: {{ car_performance_specs.get('horsepower', 'N/A') }}</li>
+      <li>Torque: {{ car_performance_specs.get('torque', 'N/A') }}</li>
+      <li>0–60 mph: {{ car_performance_specs.get('0_60_mph', 'N/A') }}</li>
+      <li>Top Speed: {{ car_performance_specs.get('top_speed', 'N/A') }}</li>
+    </ul>
+  </div>
 
+  <div class="section">
+    <h2>Features</h2>
+    <ul>
+      {% for feature in car_features %}
+        <li>{{ feature }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Safety</h2>
+    <ul>
+      {% for safety in car_safety_features %}
+        <li>{{ safety }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Special Features</h2>
+    <p>{{ car_primary_info['special_features_modifications'] }}</p>
+  </div>
+
+  <div class="section">
+    <h2>Image Description</h2>
+    <p>{{ car_primary_info['image_url'] }}</p>
+  </div>
 </body>
 </html>
