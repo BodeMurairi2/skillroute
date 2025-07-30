@@ -35,6 +35,7 @@ def upload_user_image(image_path, file_name):
 
     base_url = os.getenv("R2_PUBLIC_URL_BASE").rstrip("/")
     public_url = f"{base_url}/{path_to_upload}"
+    print(f"Image uploaded to: {public_url}")
     return public_url
 
 if __name__ == "__main__":

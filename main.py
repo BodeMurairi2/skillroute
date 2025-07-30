@@ -5,8 +5,10 @@
 import os
 import re
 import json
-from flask import Flask, request, redirect, render_template, url_for, session
+from flask import Flask, request, redirect, render_template
+from flask import session, url_for, make_response 
 from flask_session import Session
+from weasyprint import HTML
 from store_userphoto import upload_user_image
 from get_car_info import get_request
 from werkzeug.utils import secure_filename
@@ -25,8 +27,10 @@ app.config['SESSION_PERMANENT'] = False
 
 Session(app)
 
+
 @app.route("/", methods=["GET", "POST"])
 def home():
+    """Home page to upload car image."""
     if request.method == "POST":
         file = request.files["car_photo"]
         if file:
@@ -48,6 +52,7 @@ def home():
 
 @app.route("/get-car-info/get-infos", methods=["GET"])
 def get_infos():
+    """Get car information based on uploaded image."""
     json_response = session.get('response_json', None)
     user_image = session.get('uploaded_image', None)
 
@@ -89,13 +94,68 @@ def get_infos():
         car_performance_specs = {}
 
     return render_template(
-        "try.html",
+        "carInfo.html",
         is_car=is_car,
         car_primary_info=car_primary_info,
         car_features=car_features,
         car_safety_features=car_safety_features,
         car_performance_specs=car_performance_specs
     )
+
+@app.route("/download-report")
+def download_report():
+    """Generate and download PDF report."""
+    response_json = session.get('response_json', None)
+    user_image = session.get('uploaded_image', None)
+
+    if not response_json:
+        return "No data to generate PDF", 400
+
+    data = json.loads(response_json)
+    is_car = data.get("is_car", False)
+
+    if is_car:
+        car_details = data.get("car_details", {})
+        car_primary_info = {
+            "car_name": car_details["brand"],
+            "car_model": car_details["model"],
+            "car_year": car_details["approximate_year"],
+            "body_style": car_details["body_style"],
+            "exterior_design": car_details["exterior_design"],
+            "interior_design": car_details["interior_design"],
+            "color": car_details["color"],
+            "price": car_details["price_range"],
+            "engine_type": car_details["engine_type"],
+            "image_url": car_details["image_url_info"],
+            "special_features_modifications": car_details["special_features_modifications"],
+            "user_uploaded_image_url": user_image
+        }
+        car_features = car_details.get("car_features", [])
+        car_safety_features = car_details.get("safety_features", [])
+        car_performance_specs = car_details.get("performance_specifications", {})
+    else:
+        car_primary_info = {
+            "message": "The uploaded image does not appear to be a car.",
+            "image_url": data.get("image_url_info", ""),
+            "user_uploaded_image_url": user_image
+        }
+        car_features = []
+        car_safety_features = []
+        car_performance_specs = {}
+
+    html = render_template("pdf_report.html",
+                           is_car=is_car,
+                           car_primary_info=car_primary_info,
+                           car_features=car_features,
+                           car_safety_features=car_safety_features,
+                           car_performance_specs=car_performance_specs)
+
+    pdf = HTML(string=html, base_url=request.root_url).write_pdf()
+
+    response = make_response(pdf)
+    response.headers["Content-Type"] = "application/pdf"
+    response.headers["Content-Disposition"] = "attachment; filename=car_report.pdf"
+    return response
 
 if __name__ == "__main__":
     app.run(debug=True, port=8000)

@@ -13,3 +13,13 @@ temp_Session/
 
 # remove temp_uploads/
 temp_uploads/
+
+# remove .DS_Store files
+.DS_Store
+
+# remove .sh files
+*.sh
+
+# remove temp_session and temp_uploads directories
+temp_session/
+temp_uploads/
