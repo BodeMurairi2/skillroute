@@ -246,6 +246,3 @@ def send_report():
         return redirect(url_for('home'))
 
     return render_template("email.html")
-
-if __name__ == "__main__":
-    app.run(debug=True, port=8000)
